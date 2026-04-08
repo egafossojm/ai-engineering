@@ -51,11 +51,12 @@ In order for the model to understand the correct position of the words, we need 
 
 ### 1. Self attention
 **Self attention** allows the model to understand the meaning of one word in a sentence.\
-In the sentense : `[CLS] The bank of the river was flooded [SEP]` The word `bank` does not mean a financial institution.\
+In the sentence : `[CLS] The bank of the river was flooded [SEP]` The word `bank` does not mean a financial institution.\
 Self attention compare/Calculate(With math) de relation between the word bank and other words in the sentence to get its real meaning in that sentence. 
 
 ### 2. How does Self Attention works ?
 #### Step 1
+
 Each embedded vector(Each embedded word token) will be multiplied by:\
 `Query` Metrics to get a **Query vector**\
 `Key` Metrics to get a **Key vector**\
@@ -69,3 +70,28 @@ As many Key vectors as we have words in the input sentence.\
 As many Value vectors as we have words in the input sentence.
 
 #### Step 2
+Now we are going to determine for each word in the sentence, if there are another words in the sentence more relevent to it.
+
+**How**: By multtiplying the Query vector of the giving word with the Key vector of other words in the sentence.\
+`Attention Score` = `Query vector` **"MATHMUL"** `Key vector`
+
+**EX:** for the word bank, let's check the attention with river.\
+`Attention Score` = `Query vector(bank)` **"MATHMUL"** `Key vector(river)`
+
+- We expect `Attention Score`in this case to be high to tell the model to get more attention on the word river when processing the word bank.
+- This operation will be done with all other word in the sentence
+- For the word bank, river and flooded are supposed to provide high attention scores. That way the model will better know the context or the meaning of the word bank.
+
+#### Step 3
+We now know words in the sentence that require attentions.(High attention scores). Itś time for the model to get the real meaning of the word.
+
+**How**:.By multiplying the Attention score with the Value vector of the word.  The `Value vector` has all the different meanings of the word. With the attention, the model will know the context and then the meaning in this case.
+`Final context` =`Attention Score` **"MATHMUL"** `Value vector`
+
+**EX:** for the word bank, let's check the result.\
+`Final context(bank)` = `Attention Score` **"MATHMUL"** `Value vector(bank)`
+
+ ![Embedding](img/self-attention.png)
+
+ This diagram shows the output on a single word(bank).\
+ This will be done for all words in the sentence.
