@@ -58,9 +58,12 @@ Self attention compare/Calculate(With math) de relation between the word bank an
 #### Step 1
 
 Each embedded vector(Each embedded word token) will be multiplied by:\
-`Query` Metrics to get a **Query vector**\
-`Key` Metrics to get a **Key vector**\
-`Value` Metrics to get a **Value vector**
+`Query` Matrix to get a **Query vector**\
+`Key` Matrix to get a **Key vector**\
+`Value` Matrix to get a **Value vector**
+
+These Matrices are consistent across all inputs.\
+**They have weights and parameters inside of them that they have learned during training through back propagation.**
 
 ![Embedding](img/linear-transformation.png)
 
@@ -69,29 +72,75 @@ As many Query vectors as we have words in the input sentence.\
 As many Key vectors as we have words in the input sentence.\
 As many Value vectors as we have words in the input sentence.
 
+![Calculate Key vectors](img/key-vector-calculation.png)
+
 #### Step 2
 Now we are going to determine for each word in the sentence, if there are another words in the sentence more relevent to it.
 
-**How**: By multtiplying the Query vector of the giving word with the Key vector of other words in the sentence.\
-`Attention Score` = `Query vector` **"MATHMUL"** `Key vector`
+**How ?**: By multtiplying the Query vector of the giving word with the Key vector of other words in the sentence.\
+`Attention Score` = `Query vector` **"MATHMUL"** `Key vectors`
 
 **EX:** for the word bank, let's check the attention with river.\
 `Attention Score` = `Query vector(bank)` **"MATHMUL"** `Key vector(river)`
 
+- For bank word, we will do this for every `key vector(x)`
 - We expect `Attention Score`in this case to be high to tell the model to get more attention on the word river when processing the word bank.
 - This operation will be done with all other word in the sentence
 - For the word bank, river and flooded are supposed to provide high attention scores. That way the model will better know the context or the meaning of the word bank.
 
 #### Step 3
-We now know words in the sentence that require attentions.(High attention scores). Itś time for the model to get the real meaning of the word.
 
-**How**:.By multiplying the Attention score with the Value vector of the word.  The `Value vector` has all the different meanings of the word. With the attention, the model will know the context and then the meaning in this case.
-`Final context` =`Attention Score` **"MATHMUL"** `Value vector`
+Now we will convert Attention scores into propability distributions.\
+That will help the model speed up training.
+
+**How ?**: By converting Scores to weights using Softmax.
+
+ ![Embedding](img/softmax.webp)
+
+#### Step 4
+Now we have the softmax Weights, (The model knows that high probabilities implies more attention), It's time for the model to get the real meaning of the word.
+
+**How**:.By multiplying the softmax weights with the Value vector of the word.\
+The `Value vectors` contain the detailed information of each token. Shows the meaning of the word. With the attention, the model will know the context and therefore the meaning in that context.\
+`Final context` =`Attention Scores` **"MATHMUL"** `Value vector`
 
 **EX:** for the word bank, let's check the result.\
 `Final context(bank)` = `Attention Score` **"MATHMUL"** `Value vector(bank)`
+
+This will provide weighted vectors.\
+To get the final representation of the word bank, we are going to make a `sum` of all the weighted vectors.
 
  ![Embedding](img/self-attention.png)
 
  This diagram shows the output on a single word(bank).\
  This will be done for all words in the sentence.
+
+
+ ### 3. Multi Head Attention
+
+ #### How it works ?
+
+ In real world, there is not just 1 attention head as we saw in the previous section.
+ - There are `12 attention heads in each transformer layer`. Meaning there are `72 attention heads in total` for DistilBERT.
+ - Each attention head is focusing on something different in the sentence. 
+ - Each attention head computes a seperate attention mechanism independently but using the same input token.(So in one transformer layer, there are 12 different query matrix, 12 different key matrix and 12 different value matrix that learn different weights)
+ - All 12 attention heads within a layer process the input data at the same time, independently from each other.
+
+  ![Multi Haed attention topology](img/multi-head-attention.png)
+
+  #### Output of Attention Heads
+
+  - Each attention head generates a contex-aware vector for each token in the input sequence.\
+  - In our previous example, were are going to get `12 context-aware vectors`(12 different vectors) for the word bank in `each transformer layer`. Same for all other words in the sentence.
+  - `FINALLY: we are going to concatenate all the 12 resulting vectors to make one very long vector.`
+
+  #### After concatenation
+
+  ![Head focus](img/after-concatenation.png)
+  ![Embedding](img/layer-normalization.png)
+
+  After all this, we then get the output for the next transformer.
+
+#### Example of Focus areas for groups of attention Heads
+
+  ![Head focus](img/multi-head-attention-focus.png)
