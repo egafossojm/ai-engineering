@@ -5,6 +5,8 @@
 - AWS Account
 - IAM user with needed permissions or with adminstrators permissions to make things simple
 
+## 1. Quick Setup
+
 ### Via AWS Console
 1. Go to the Amazon SageMaker console
 2. Under the **Environment configuration**, in the **Domains** tab, click on `Create domain`
@@ -13,7 +15,10 @@
 5. Once created, Go to your domain page, under **User profiles**, next to your created user, hit `Open Studio`.
 
 
-## Compute
+### Compute
 - We will use `ml.t3.medium` to setup things.(We just need CPU).
 - We will use **Accelerated Computing**(`ml.p2.xlarge`) instances for training (any `xx.px.xxxxxx`has GPU).
 - [Pricing](https://aws.amazon.com/sagemaker/ai/pricing/)
+
+
+## 2. Organizational Setup
