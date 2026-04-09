@@ -79,5 +79,5 @@ predictor = huggingface_model.deploy(
 	instance_type='ml.g6.2xlarge' # ec2 instance type
 )
 ```
-12. Run All cells in the NoteBook to start prediction.
+14. Run All cells in the NoteBook to start prediction.
 
