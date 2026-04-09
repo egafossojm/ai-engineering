@@ -46,6 +46,15 @@ In order for the model to understand the correct position of the words, we need 
 
 ![Embedding](img/positional-encodings.png)
 
+### How ?
+
+![Embedding](img/positional-encodings-how.png)
+
+### Positional encoding calculation
+
+![Embedding](img/positional-encodings-calculation1.png)
+![Embedding](img/positional-encodings-calculation2.png)
+
 
 # Attention Mechanism
 
