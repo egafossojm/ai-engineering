@@ -18,6 +18,46 @@
 
 ![architecture](img/training-architecture.png)
 
+### 4. In the Code
+
+#### **Transformers - The library**
+transformers is the HuggingFace library that provides:
+- pretrained models
+- tokenizers
+- pipelines
+- utilities for NLP, vision, audio, and multimodal tasks
+
+It includes dozens of model families(`Architectures`):
+- BERT
+- DistilBERT (Same architecture as BERT but only 6 transformer layers)
+- RoBERTa
+- GPT‑2
+- T5
+- DeBERTa
+- etc.
+
+Inside each family, you have specific pretrained models. These are trained **weights + tokenizer + configuration**.\
+Each one is a different checkpoint, trained with different **data**, different **vocabulary**, different **casing rules**, different **sizes**.
+
+Examples:
+
+**BERT models**
+- `bert-base-uncased`
+- `bert-large-uncased`
+- `bert-base-cased`
+- `bert-base-multilingual-cased`
+
+**DistilBERT models**
+- `distilbert-base-uncased`
+- `distilbert-base-cased`
+- `distilbert-base-multilingual-cased`
+
+**RoBERTa models**
+- `roberta-base`
+- `roberta-large`
+
+
+
 
 # Embeddings
 
