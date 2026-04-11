@@ -336,3 +336,34 @@ They are Raw model outputs before softmax.
 
 Shape example: `[batch_size, num_classes]`.
 
+# Understand the function calculate_accu()
+```python
+def calculate_accu(big_idx, targets):
+    n_correct = (big_idx == targets).sum().item()
+    return n_correct
+```
+This function calculates de `accurrency`: It computes how many predictions are correct inside a batch.
+
+### 1. What are `big_idx` and `targets`?
+`big_idx` is the tensor of predicted class indices. (Highest prediction -> 1 others -> 0)
+
+`targets` is the tensor of true labels.
+
+Example:
+
+For one bacth we have 4 predictions (batch_size = 4):
+| Sequence |  Prdictions for this batch | big_idx | targets |
+| :--- | :--- | :--- | :--- |
+| I love The Office | [0.88, 0.1, 0.33, 0.7] | 1 0 0 0 | 1 0 0 0 |
+| Friends is a great show | [0.99, 0.04, 0.5, 0.77] | 1 0 0 0 | 1 0 0 0 |
+| Elon Musk lands on Mars | [0.38, 0.12, 0.1, 0.7] | 0 0 0 1 | 0 0 1 0 |
+| Breakthrough in cancer vaccine | [0.2, 0.1, 0.7, 0.55] | 0 0 1 0 | 0 0 1 0|
+
+```python
+print(big_idx == targets) # tensor([True, True, False, True])
+# True = 1 and False = 0
+print(big_idx == targets).sum() # tensor(3)  
+print(big_idx == targets).sum().item() # 3
+```
+
+
